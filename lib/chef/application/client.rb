@@ -420,7 +420,7 @@ class Chef::Application::Client < Chef::Application
       rescue SystemExit
         raise
       rescue Exception => e
-        Chef::Application.fatal!("#{e.class}: #{e.message}", 1)
+        Chef::Application.fatal!("#{e.class}: #{e.message}", e)
       end
     else
       interval_run_chef_client
@@ -450,6 +450,7 @@ class Chef::Application::Client < Chef::Application
     unless @signal == IMMEDIATE_RUN_SIGNAL
       Chef::Log.debug("Sleeping for #{sleep_sec} seconds")
       interval_sleep(sleep_sec)
+
     end
     @signal = nil
 
@@ -463,7 +464,7 @@ class Chef::Application::Client < Chef::Application
       retry
     end
 
-    Chef::Application.fatal!("#{e.class}: #{e.message}", 1)
+    Chef::Application.fatal!("#{e.class}: #{e.message}", e)
   end
 
   def test_signal
