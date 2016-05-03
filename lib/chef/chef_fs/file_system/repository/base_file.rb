@@ -29,6 +29,7 @@ class Chef
           attr_reader :file_path
           attr_reader :data_handler
 
+          alias_method :display_path, :path
           alias_method :display_name, :name
 
           def initialize(name, parent)
@@ -50,6 +51,11 @@ class Chef
 
           def dir?
             false
+          end
+
+          # Used to compare names on disk to the API, for diffing.
+          def bare_name
+            File.basename(name, ".*")
           end
 
           def is_json_file?
