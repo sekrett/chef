@@ -29,6 +29,8 @@ class Chef
           attr_reader :file_path
           attr_reader :data_handler
 
+          alias_method :display_name, :name
+
           def initialize(name, parent)
             @parent = parent
             file_path = "#{parent.file_path}/#{name}"
