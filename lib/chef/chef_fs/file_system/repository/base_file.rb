@@ -31,9 +31,19 @@ class Chef
 
           def initialize(name, parent)
             @parent = parent
+            file_path = "#{parent.file_path}/#{name}"
+
+            # bare policies can be "foo-0.0.0", which results in an extname of ".0"
+            # so let's check that we're getting what we expected.
+            unless %w{ .rb .json }.include? File.extname(name)
+              Chef::Log.debug "BaseFile: Detecting file extension for #{name}"
+              ext = File.exist?(file_path + ".rb") ? ".rb" : ".json"
+              name += ext
+              file_path += ext
+            end
             @name = name
             @path = Chef::ChefFS::PathUtils.join(parent.path, name)
-            @file_path = "#{parent.file_path}/#{name}"
+            @file_path = file_path
           end
 
           def dir?
